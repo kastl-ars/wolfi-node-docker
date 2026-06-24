@@ -1,0 +1,42 @@
+---
+
+name: Build the image and push it to ghcr.io
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - wolfi-node-docker.yml
+      - .github/workflows/build-and-publish-to-ghcr.yml
+  workflow_dispatch:
+  schedule:
+    # run every Monday at 02:30
+    - cron: '30 2 * * 1'
+
+permissions: {}
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push-the-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+
+      # https://github.com/chainguard-images/actions/tree/main/apko-publish
+      - name: Build image with Apko
+        uses: chainguard-images/actions/apko-publish@a63bd73b7ab5cb3ae175d81ab9b72e4922af3acd # v1.0.32
+        with:
+          config: wolfi-node-docker.yml
+          tag: ghcr.io/kastl-ars/wolfi-node-docker:latest ghcr.io/kastl-ars/wolfi-node-docker:${{ github.sha }}
