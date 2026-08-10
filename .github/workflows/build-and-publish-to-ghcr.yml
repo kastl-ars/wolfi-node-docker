@@ -36,7 +36,7 @@ jobs:
 
       # https://github.com/chainguard-images/actions/tree/main/apko-publish
       - name: Build image with Apko
-        uses: chainguard-images/actions/apko-publish@a63bd73b7ab5cb3ae175d81ab9b72e4922af3acd # v1.0.32
+        uses: chainguard-images/actions/apko-publish@8e701b320e7efcb120a1115de26e9fe833f86390 # v1.0.38
         with:
           config: wolfi-node-docker.yml
           tag: ghcr.io/kastl-ars/wolfi-node-docker:latest ghcr.io/kastl-ars/wolfi-node-docker:${{ github.sha }}
